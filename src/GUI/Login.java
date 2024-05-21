@@ -104,7 +104,7 @@ public class Login extends JFrame implements ActionListener{
             new SignUp();
         }else if(e.getSource() == btresetpass){
             this.setVisible(false);
-            new ResetPass();
+            new ResetPassGUI();
         } else if (e.getSource() == btlogin) {
             if(tfusn.getText().equals("")|| tfpass.getText().equals("")){
                 JOptionPane.showMessageDialog(null, "Must not be blank.");

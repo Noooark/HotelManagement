@@ -1,7 +1,7 @@
 package Main;
 
 import GUI.Login;
-import GUI.ResetPass;
+import GUI.ResetPassGUI;
 import GUI.SignUp;
 
 public class HotelManagement {

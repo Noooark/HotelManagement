@@ -1,17 +1,20 @@
 package GUI;
 
+import DAO.LoginDAO;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class ResetPass extends JFrame implements ActionListener {
+public class ResetPassGUI extends JFrame implements ActionListener {
     JLabel lbbgr,lbresetpass,lbusn,lbnewpass,lbconfpass;
     JTextField tfusn;
     JPasswordField tfnewpass,tfconfpass;
     JPanel pnresetpass;
     JButton btback,btreset;
-
+    String addpass;
+    LoginDAO log = new LoginDAO();
     private JLabel createLabel(String a,int n)
     {
         JLabel label = new JLabel(a);
@@ -33,7 +36,7 @@ public class ResetPass extends JFrame implements ActionListener {
         passwordField.setFont(newFont);
         return passwordField;
     }
-    public ResetPass() {
+    public ResetPassGUI() {
         ////--------------------bg----------------//
         ImageIcon bg=new ImageIcon("src/IMG/pp.png");
         lbbgr = new JLabel(bg);
@@ -99,14 +102,30 @@ public class ResetPass extends JFrame implements ActionListener {
         lbbgr.add(pnresetpass);
         this.add(lbbgr);
     }
-    public void actionPerformed(ActionEvent e){
-        if(e.getSource() == btback){
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == btback) {
             this.setVisible(false);
             new Login();
-        } else if (tfusn.getText().equals("")) {
-            JOptionPane.showMessageDialog(null, "Username must not be blank");
-        } else if (tfnewpass.getText().equals("") || tfconfpass.getText().equals("")) {
-            JOptionPane.showMessageDialog(null, "Password must not be blank");
+
+        } else if (e.getSource() == btreset) {
+            if (tfusn.getText().equals("")) {
+                JOptionPane.showMessageDialog(null, "Username must not be blank");
+            } else if (tfnewpass.getText().equals("") || tfconfpass.getText().equals("")) {
+                JOptionPane.showMessageDialog(null, "Password must not be blank");
+            } else if (tfnewpass.getText().equals(tfconfpass.getText())) {
+                addpass =new String(tfconfpass.getPassword());
+                try {
+                    if (log.ResetPass(addpass, tfusn.getText())) {
+                        JOptionPane.showMessageDialog(null, "Reset Password successful.");
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Reset Password failed.");
+                    }
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Passwords do not match.");
+            }
         }
     }
 }

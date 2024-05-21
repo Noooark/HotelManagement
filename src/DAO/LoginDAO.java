@@ -3,6 +3,7 @@ package DAO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class LoginDAO {
     ResultSet result;
@@ -49,15 +50,27 @@ public class LoginDAO {
         return false;
 
     }
-    public void ResetPass(String newpass,String email) throws Exception
-    {
-        Connection conn= new DBconnect().getConn();
-        String query = "UPDATE account SET password=? WHERE email=?";
-        PreparedStatement ps=conn.prepareStatement(query);
-        ps.setString(1,newpass);
-        ps.setString(2,email);
-        check= ps.executeUpdate();
-        conn.close();
-    }
-
+//    public void ResetPass(String newpass,String usr) throws Exception
+//    {
+//        Connection conn= new DBconnect().getConn();
+//        String query = "UPDATE account SET password=? WHERE username=?";
+//        PreparedStatement ps=conn.prepareStatement(query);
+//        ps.setString(1,newpass);
+//        ps.setString(2,usr);
+//        check= ps.executeUpdate();
+//        conn.close();
+//    }
+            public boolean ResetPass(String newpass, String usr) throws Exception {
+                String query = "UPDATE account SET password=? WHERE username=?";
+                try (Connection conn = new DBconnect().getConn();
+                     PreparedStatement ps = conn.prepareStatement(query)) {
+                    ps.setString(1, newpass);
+                    ps.setString(2, usr);
+                    int check = ps.executeUpdate();
+                    return check > 0;
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    return false;
+                }
+            }
 }
